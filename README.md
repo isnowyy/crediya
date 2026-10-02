@@ -19,10 +19,9 @@ calculados sobre la información real.
 4. [Estructura del proyecto](#estructura-del-proyecto)
 5. [Diagramas](#diagramas)
 6. [Decisiones de diseño](#decisiones-de-diseño)
-7. [Dónde está cada requisito](#dónde-está-cada-requisito)
-8. [Ejemplos de uso](#ejemplos-de-uso)
-9. [Pruebas](#pruebas)
-10. [Alcance y limitaciones conocidas](#alcance-y-limitaciones-conocidas)
+7. [Ejemplos de uso](#ejemplos-de-uso)
+8. [Pruebas](#pruebas)
+9. [Alcance y limitaciones conocidas](#alcance-y-limitaciones-conocidas)
 
 ---
 
@@ -156,7 +155,6 @@ crediya/
 ├── docs/
 │   ├── diagrama-clases.mmd      UML del dominio (Mermaid)
 │   ├── diagrama-arquitectura.mmd UML de capas y repositorios
-│   ├── guia-sustentacion.md     Preguntas frecuentes y dónde está cada respuesta
 │   └── img/                     Los dos diagramas en PNG
 └── src/
     ├── main/java/com/crediya/
@@ -270,28 +268,6 @@ Dos decisiones:
 
 `PersistenciaException` traduce `SQLException` e `IOException` a un tipo propio. Es lo que
 permite que los servicios no queden atados a JDBC.
-
----
-
-## Dónde está cada requisito
-
-| Requisito del enunciado | Implementación |
-|---|---|
-| Herencia | `Persona` → `Empleado`, `Cliente` · `RepositorioArchivo<T>` → cuatro repositorios · `Menu` → seis menús |
-| Polimorfismo | `Persona.descripcionRol()` responde distinto en cada subclase · `CalculadoraInteres.calcular()` tiene tres implementaciones · `Repositorio<T>` tiene tres |
-| Encapsulamiento | Atributos privados en todo el modelo; los modificadores validan antes de asignar; `Prestamo.getPagos()` devuelve una lista inmodificable |
-| Clases abstractas e interfaces | `Persona`, `RepositorioArchivo`, `RepositorioJdbc`, `Menu`, `CrediYaException` · `Identificable`, `Repositorio<T>`, `CalculadoraInteres`, `MapeadorFila<T>` |
-| Colecciones | `List`, `Map`, `Optional`, `EnumMap` en `CalculadoraInteresFactory`, `LinkedHashMap` en `RepositorioMemoria`, `TreeMap` en `recaudoPorMes()` |
-| Genéricos | `Repositorio<T extends Identificable>`, `RepositorioArchivo<T>`, `RepositorioJdbc<T>`, `MapeadorFila<T>` |
-| Manejo de archivos | `repositorio/archivo/` con `java.nio.file.Files`, UTF-8 y try-with-resources · `ExportadorTexto` |
-| Persistencia MySQL (JDBC) | `repositorio/jdbc/` con `PreparedStatement`, `RETURN_GENERATED_KEYS` y `JOIN` |
-| Cálculo automático de interés y cuota | `modelo/interes/` — las tres fórmulas, invocadas desde el constructor de `Prestamo` |
-| Cambio de estado del préstamo | `Prestamo.registrarPago()` lo hace solo al llegar a saldo cero · `PrestamoServicio.cambiarEstado()` para el cambio manual |
-| Expresiones lambda | `ReporteServicio.buscar(Predicate<Prestamo>)` · los menús declarados como `List<OpcionMenu>` con `Runnable` · `MapeadorFila<T>` como interfaz funcional |
-| Stream API | Todo `ReporteServicio`: `filter`, `map`, `sorted`, `reduce`, `groupingBy`, `counting`, `limit`, `toList` |
-| SOLID | Tabla de la sección anterior |
-| Patrones de diseño | Ocho, con su justificación en la sección anterior |
-| Manejo de excepciones | Jerarquía propia + captura centralizada en `Menu` |
 
 ---
 
