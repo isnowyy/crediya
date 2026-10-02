@@ -1,0 +1,5 @@
+# id;nombre;documento;rol;correo;salario
+1;Ana Maria Gomez;1098765432;ASESOR;ana.gomez@crediya.co;3200000.00
+2;Carlos Pena Ruiz;91234567;COBRADOR;carlos.pena@crediya.co;2400000.00
+3;Laura Rincon;1020304050;ANALISTA;laura.rincon@crediya.co;3800000.00
+4;Jorge Villamizar;79856231;ADMINISTRADOR;jorge.v@crediya.co;6500000.00

@@ -1,0 +1,102 @@
+%% CrediYa - Capas y patron Repositorio
+%% Las flechas apuntan siempre hacia la abstraccion, nunca hacia una tecnologia.
+classDiagram
+    direction LR
+
+    class Menu {
+        <<abstract>>
+        #opciones()* List~OpcionMenu~
+        +ejecutar()
+    }
+    class MenuPrincipal
+    class MenuEmpleados
+    class MenuClientes
+    class MenuPrestamos
+    class MenuPagos
+    class MenuReportes
+
+    class EmpleadoServicio
+    class ClienteServicio
+    class PrestamoServicio
+    class PagoServicio
+    class ReporteServicio
+    class ExportadorTexto
+
+    class Repositorio~T~ {
+        <<interface>>
+        +guardar(T) T
+        +buscarPorId(int) Optional~T~
+        +listar() List~T~
+        +eliminar(int) boolean
+    }
+
+    class EmpleadoRepositorio {
+        <<interface>>
+    }
+    class ClienteRepositorio {
+        <<interface>>
+    }
+    class PrestamoRepositorio {
+        <<interface>>
+    }
+    class PagoRepositorio {
+        <<interface>>
+    }
+
+    class RepositorioJdbc~T~ {
+        <<abstract>>
+        #tabla()* String
+        #mapeador()* MapeadorFila~T~
+    }
+    class RepositorioArchivo~T~ {
+        <<abstract>>
+        #cabecera()* String
+        #serializar(T)* String
+        #deserializar(String[])* T
+    }
+    class RepositorioMemoria~T~
+
+    class ConexionBD {
+        <<singleton>>
+        +getInstancia()$ ConexionBD
+        +abrir() Connection
+    }
+
+    class FabricaRepositorios {
+        <<factory>>
+        +crear(TipoAlmacen)$ Repositorios
+    }
+
+    Menu <|-- MenuPrincipal
+    Menu <|-- MenuEmpleados
+    Menu <|-- MenuClientes
+    Menu <|-- MenuPrestamos
+    Menu <|-- MenuPagos
+    Menu <|-- MenuReportes
+
+    MenuEmpleados ..> EmpleadoServicio
+    MenuClientes ..> ClienteServicio
+    MenuPrestamos ..> PrestamoServicio
+    MenuPagos ..> PagoServicio
+    MenuReportes ..> ReporteServicio
+    MenuReportes ..> ExportadorTexto
+
+    EmpleadoServicio ..> EmpleadoRepositorio
+    ClienteServicio ..> ClienteRepositorio
+    PrestamoServicio ..> PrestamoRepositorio
+    PagoServicio ..> PagoRepositorio
+    ReporteServicio ..> PrestamoRepositorio
+
+    Repositorio <|-- EmpleadoRepositorio
+    Repositorio <|-- ClienteRepositorio
+    Repositorio <|-- PrestamoRepositorio
+    Repositorio <|-- PagoRepositorio
+
+    Repositorio <|.. RepositorioJdbc
+    Repositorio <|.. RepositorioArchivo
+    Repositorio <|.. RepositorioMemoria
+
+    RepositorioJdbc ..> ConexionBD
+    FabricaRepositorios ..> RepositorioJdbc : mysql
+    FabricaRepositorios ..> RepositorioArchivo : archivo
+    FabricaRepositorios ..> RepositorioMemoria : memoria

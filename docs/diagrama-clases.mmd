@@ -1,0 +1,130 @@
+%% CrediYa - Diagrama de clases del dominio
+%% Se visualiza en https://mermaid.live o directamente en GitHub.
+classDiagram
+    direction TB
+
+    class Identificable {
+        <<interface>>
+        +getId() Integer
+        +setId(Integer)
+        +esNueva() boolean
+    }
+
+    class Persona {
+        <<abstract>>
+        -Integer id
+        -String nombre
+        -String documento
+        -String correo
+        +descripcionRol()* String
+        +tipo()* String
+        +resumen() String
+    }
+
+    class Empleado {
+        -Rol rol
+        -BigDecimal salario
+        +descripcionRol() String
+        +comisionPor(BigDecimal) BigDecimal
+    }
+
+    class Cliente {
+        -String telefono
+        +descripcionRol() String
+    }
+
+    class Rol {
+        <<enumeration>>
+        ASESOR
+        COBRADOR
+        ANALISTA
+        ADMINISTRADOR
+        +comisionSobre(BigDecimal) BigDecimal
+    }
+
+    class Prestamo {
+        -Integer id
+        -BigDecimal monto
+        -BigDecimal tasaInteresMensual
+        -int cuotas
+        -LocalDate fechaInicio
+        -BigDecimal montoTotal
+        -BigDecimal valorCuota
+        -EstadoPrestamo estado
+        -List~Pago~ pagos
+        +getTotalAbonado() BigDecimal
+        +getSaldoPendiente() BigDecimal
+        +getFechaVencimiento() LocalDate
+        +estaVencido(LocalDate) boolean
+        +diasDeMora(LocalDate) long
+        +registrarPago(Pago)
+    }
+
+    class Builder {
+        +cliente(Cliente) Builder
+        +empleado(Empleado) Builder
+        +monto(BigDecimal) Builder
+        +construir() Prestamo
+    }
+
+    class Pago {
+        -Integer id
+        -int prestamoId
+        -LocalDate fechaPago
+        -BigDecimal monto
+    }
+
+    class EstadoPrestamo {
+        <<enumeration>>
+        PENDIENTE
+        PAGADO
+    }
+
+    class TipoInteres {
+        <<enumeration>>
+        SIMPLE
+        COMPUESTO
+        CUOTA_FIJA
+    }
+
+    class CalculadoraInteres {
+        <<interface>>
+        +calcular(BigDecimal, BigDecimal, int) PlanPago
+    }
+
+    class InteresSimple
+    class InteresCompuesto
+    class CuotaFija
+
+    class PlanPago {
+        <<record>>
+        +BigDecimal montoTotal
+        +BigDecimal valorCuota
+    }
+
+    class CalculadoraInteresFactory {
+        <<factory>>
+        +para(TipoInteres)$ CalculadoraInteres
+    }
+
+    Identificable <|.. Persona
+    Identificable <|.. Prestamo
+    Identificable <|.. Pago
+
+    Persona <|-- Empleado
+    Persona <|-- Cliente
+
+    Empleado "1" --> "1" Rol
+    Prestamo "1" --> "1" Cliente : deudor
+    Prestamo "1" --> "1" Empleado : coloco
+    Prestamo "1" o-- "0..*" Pago : historico
+    Prestamo "1" --> "1" EstadoPrestamo
+    Prestamo "1" --> "1" TipoInteres
+    Builder ..> Prestamo : construye
+
+    CalculadoraInteres <|.. InteresSimple
+    CalculadoraInteres <|.. InteresCompuesto
+    CalculadoraInteres <|.. CuotaFija
+    CalculadoraInteres ..> PlanPago : produce
+    CalculadoraInteresFactory ..> CalculadoraInteres : crea
+    Prestamo ..> CalculadoraInteresFactory : liquida con

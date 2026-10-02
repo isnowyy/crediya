@@ -1,0 +1,35 @@
+================================================================
+ CrediYa S.A.S. - Informe de cartera
+ Generado el 2026-10-01 20:46
+================================================================
+
+RESUMEN GENERAL
+----------------------------------------------------------------
+Prestamos registrados : 6
+  activos             : 5
+  pagados             : 1
+  vencidos            : 2
+Capital colocado      : $ 31.500.000,00
+Saldo por cobrar      : $ 33.280.151,87
+Total recaudado       : $ 5.844.666,67
+Indice de mora        : 40.00 %
+
+CLIENTES MOROSOS
+----------------------------------------------------------------
+Marta Quintero               doc. 63301122     1 vencido(s)  deuda $ 1.916.666,67     mora 92 dias
+Sofia Carreno                doc. 1101223344   1 vencido(s)  deuda $ 1.488.263,22     mora 183 dias
+
+PRODUCTIVIDAD POR EMPLEADO
+----------------------------------------------------------------
+Laura Rincon             Analista de credito     2 prestamo(s)  colocado $ 13.500.000,00    comision $ 67.500,00
+Carlos Pena Ruiz         Gestor de cobranza      2 prestamo(s)  colocado $ 11.000.000,00    comision $ 88.000,00
+Ana Maria Gomez          Asesor comercial        2 prestamo(s)  colocado $ 7.000.000,00     comision $ 105.000,00
+Jorge Villamizar         Administrador de oficina  0 prestamo(s)  colocado $ 0,00             comision $ 0,00
+
+PRESTAMOS ACTIVOS
+----------------------------------------------------------------
+#6    Pedro Sanchez Diaz         vence 2029-09-01  saldo $ 15.197.835,00
+#3    Luis Fernando Ariza        vence 2028-08-01  saldo $ 9.510.720,32
+#1    Pedro Sanchez Diaz         vence 2027-07-01  saldo $ 5.166.666,66
+#2    Marta Quintero             vence 2026-07-01  saldo $ 1.916.666,67
+#4    Sofia Carreno              vence 2026-04-01  saldo $ 1.488.263,22
