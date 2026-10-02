@@ -106,20 +106,19 @@ En `sql/crear_usuario.sql`, `CAMBIE_ESTA_CLAVE` es un marcador de posición. **N
 archivo tal cual**, o la cuenta quedará con una clave que está publicada en este repositorio.
 Tampoco lo edite: está versionado, y su clave real terminaría en un archivo que git vigila.
 
-Estos tres comandos, en la misma terminal, hacen todo sin tocar la plantilla. El primero pide
-la clave que usted elija para `crediya_app`; el segundo pedirá la de `root`.
+Este comando hace todo sin tocar la plantilla. Pide primero la clave que usted elija para
+`crediya_app` (no se ve al escribirla) y después la de `root`:
 
 ```bash
-read -rs -p "Clave para crediya_app: " CLAVE && echo
+printf 'Clave para crediya_app: '; stty -echo; read CLAVE; stty echo; echo; sed "s/CAMBIE_ESTA_CLAVE/$CLAVE/" sql/crear_usuario.sql | mysql -u root -p && printf 'crediya.db.clave=%s\n' "$CLAVE" > crediya.local.properties && unset CLAVE && echo OK
 ```
 
-```bash
-sed "s/CAMBIE_ESTA_CLAVE/$CLAVE/" sql/crear_usuario.sql | mysql -u root -p
-```
+Use una clave de letras, dígitos y guiones bajos. Caracteres como `/`, `&`, `|` o comillas
+confunden a `sed` o al propio cliente de MySQL.
 
-```bash
-printf 'crediya.db.clave=%s\n' "$CLAVE" > crediya.local.properties && unset CLAVE
-```
+> El apagado del eco se hace con `stty` y no con `read -s -p` porque esa última es sintaxis
+> de bash: en zsh, que es el shell por defecto de macOS, `-p` significa "leer de un
+> coproceso" y el comando falla. Así funciona en los dos.
 
 `crediya.local.properties` está en `.gitignore`, así que la clave nunca sale de su máquina.
 No hace falta nada más: la URL, el usuario y el modo ya vienen configurados por defecto en
