@@ -1,22 +1,36 @@
 -- ============================================================================
 --  Usuario de aplicacion para CrediYa
 --
---  La aplicacion NUNCA debe conectarse como root. Este script crea un usuario
---  con permisos limitados unicamente a crediya_db.
+--  !! NO EJECUTE ESTE ARCHIVO TAL CUAL !!
 --
---  1. Reemplace CAMBIE_ESTA_CLAVE por una clave propia.
---  2. Ejecute:  mysql -u root -p < sql/crear_usuario.sql
---  3. Ponga la misma clave en crediya.local.properties o en la variable de
---     entorno CREDIYA_DB_PASSWORD.
+--  CAMBIE_ESTA_CLAVE es un marcador de posicion, no una clave. Si ejecuta el
+--  script sin reemplazarlo, la cuenta de la aplicacion queda con una clave que
+--  esta publicada en este mismo repositorio.
 --
---  Este archivo se versiona SOLO como plantilla: no debe contener la clave real.
+--  Forma recomendada (no modifica este archivo, que esta versionado):
+--
+--      read -rs -p "Clave para crediya_app: " CLAVE && echo
+--      sed "s/CAMBIE_ESTA_CLAVE/$CLAVE/" sql/crear_usuario.sql | mysql -u root -p
+--      printf 'crediya.db.clave=%s\n' "$CLAVE" > crediya.local.properties
+--      unset CLAVE
+--
+--  La aplicacion nunca se conecta como root: esta cuenta solo puede leer y
+--  escribir en crediya_db, y no puede crear ni borrar tablas.
+--
+--  El script es idempotente: volver a ejecutarlo con otra clave la actualiza.
 -- ============================================================================
 
+-- CREATE ... IF NOT EXISTS no toca la clave de una cuenta que ya exista, asi que
+-- el ALTER de la linea siguiente es el que realmente la fija. Con los dos, el
+-- script funciona igual si la cuenta es nueva o si ya estaba creada.
 CREATE USER IF NOT EXISTS 'crediya_app'@'localhost'
+  IDENTIFIED BY 'CAMBIE_ESTA_CLAVE';
+
+ALTER USER 'crediya_app'@'localhost'
   IDENTIFIED BY 'CAMBIE_ESTA_CLAVE';
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON crediya_db.* TO 'crediya_app'@'localhost';
 
 FLUSH PRIVILEGES;
 
-SELECT 'Usuario crediya_app creado. Recuerde cambiar la clave de la plantilla.' AS resultado;
+SELECT 'Usuario crediya_app listo.' AS resultado;

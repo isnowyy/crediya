@@ -97,28 +97,38 @@ El programa no se cae: avisa qué revisar y ofrece continuar con archivos de tex
 mysql -u root -p < sql/crediya_db.sql
 ```
 
-### 2. Crear el usuario de la aplicación
+### 2. Crear el usuario de la aplicación y configurar la conexión
 
-La aplicación **nunca** se conecta como `root`. Edite `sql/crear_usuario.sql`, reemplace
-`CAMBIE_ESTA_CLAVE` por una clave propia y ejecute:
+La aplicación **nunca** se conecta como `root`: usa una cuenta que solo puede leer y escribir
+en `crediya_db`.
+
+En `sql/crear_usuario.sql`, `CAMBIE_ESTA_CLAVE` es un marcador de posición. **No ejecute ese
+archivo tal cual**, o la cuenta quedará con una clave que está publicada en este repositorio.
+Tampoco lo edite: está versionado, y su clave real terminaría en un archivo que git vigila.
+
+Estos tres comandos, en la misma terminal, hacen todo sin tocar la plantilla. El primero pide
+la clave que usted elija para `crediya_app`; el segundo pedirá la de `root`.
 
 ```bash
-mysql -u root -p < sql/crear_usuario.sql
+read -rs -p "Clave para crediya_app: " CLAVE && echo
 ```
 
-### 3. Configurar la conexión
-
-Cree `crediya.local.properties` en la raíz del proyecto. **Este archivo está en
-`.gitignore`: la clave real nunca se sube al repositorio.**
-
-```properties
-crediya.persistencia=mysql
-crediya.db.url=jdbc:mysql://localhost:3306/crediya_db?serverTimezone=America/Bogota&useSSL=false&allowPublicKeyRetrieval=true
-crediya.db.usuario=crediya_app
-crediya.db.clave=la_clave_que_eligio
+```bash
+sed "s/CAMBIE_ESTA_CLAVE/$CLAVE/" sql/crear_usuario.sql | mysql -u root -p
 ```
 
-También funcionan las variables de entorno, que tienen prioridad sobre el archivo:
+```bash
+printf 'crediya.db.clave=%s\n' "$CLAVE" > crediya.local.properties && unset CLAVE
+```
+
+`crediya.local.properties` está en `.gitignore`, así que la clave nunca sale de su máquina.
+No hace falta nada más: la URL, el usuario y el modo ya vienen configurados por defecto en
+`src/main/resources/crediya.properties`.
+
+El script es idempotente: si se equivocó, vuelva a correr los tres comandos con otra clave y
+la actualiza.
+
+Como alternativa, las variables de entorno tienen prioridad sobre el archivo:
 
 ```bash
 export CREDIYA_DB_CLAVE=la_clave_que_eligio
