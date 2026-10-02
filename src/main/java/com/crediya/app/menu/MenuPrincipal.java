@@ -49,11 +49,11 @@ public class MenuPrincipal extends Menu {
     @Override
     protected List<OpcionMenu> opciones() {
         return List.of(
-                OpcionMenu.de("Empleados", menuEmpleados::ejecutar),
-                OpcionMenu.de("Clientes", menuClientes::ejecutar),
-                OpcionMenu.de("Prestamos", menuPrestamos::ejecutar),
-                OpcionMenu.de("Pagos", menuPagos::ejecutar),
-                OpcionMenu.de("Reportes", menuReportes::ejecutar),
+                OpcionMenu.submenu("Empleados", menuEmpleados),
+                OpcionMenu.submenu("Clientes", menuClientes),
+                OpcionMenu.submenu("Prestamos", menuPrestamos),
+                OpcionMenu.submenu("Pagos", menuPagos),
+                OpcionMenu.submenu("Reportes", menuReportes),
                 OpcionMenu.de("Cargar datos de demostracion", this::cargarDemo),
                 OpcionMenu.de("Estado del sistema", this::estado));
     }

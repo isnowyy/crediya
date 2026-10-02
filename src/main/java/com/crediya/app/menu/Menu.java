@@ -64,18 +64,27 @@ public abstract class Menu {
     }
 
     private void ejecutarConRed(OpcionMenu opcion) {
+        boolean huboError = false;
+
         try {
             opcion.accion().run();
         } catch (EntradaCerradaException e) {
             // No es un error: la sesion termino. Sube hasta Main.
             throw e;
         } catch (CrediYaException e) {
+            huboError = true;
             consola.error(e.getMessage());
             Bitacora.advertencia("Operacion rechazada: " + e.getMessage());
         } catch (RuntimeException e) {
+            huboError = true;
             consola.error("Ocurrio un error inesperado. El detalle quedo en datos/bitacora.log");
             Bitacora.error("Error inesperado en la opcion '" + opcion.etiqueta() + "'", e);
         }
-        consola.pausa();
+
+        // Siempre se pausa tras un error, aunque la opcion no lo pidiera: el
+        // mensaje tiene que alcanzar a leerse antes de que vuelva el menu.
+        if (opcion.pausar() || huboError) {
+            consola.pausa();
+        }
     }
 }
