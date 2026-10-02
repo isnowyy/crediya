@@ -1,0 +1,20 @@
+# Compilacion
+target/
+out/
+*.class
+
+# Configuracion local con credenciales reales (nunca se sube)
+crediya.local.properties
+*.env
+
+# Bitacora de ejecucion
+datos/bitacora.log
+
+# Sistema operativo / IDE
+.DS_Store
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
