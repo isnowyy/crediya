@@ -47,7 +47,7 @@ interés compuesto o cuota fija del sistema francés).
 **Requisitos:** JDK 17 o superior y Maven 3.8+. MySQL 8 solo si se quiere usar ese almacén.
 
 ```bash
-git clone https://github.com/<usuario>/crediya.git
+git clone https://github.com/isnowyy/crediya.git
 cd crediya
 ./run.sh
 ```
